@@ -25,7 +25,6 @@ function Visualizer() {
     };
 
     useEffect(() => {
-        console.log("tet");
         if (sortStates.length > 1) {
             setIndex(0);
             play();

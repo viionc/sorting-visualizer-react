@@ -48,14 +48,6 @@ function Menu() {
                 >
                     Merge Sort
                 </button>
-                <button
-                    className="py-1 w-full cursor-pointer rounded-md px-3 hover:bg-gray-400 hover:bg-opacity-25"
-                    style={{backgroundColor: sortType === "quick" ? "gray" : ""}}
-                    onClick={() => changeSortType("quick")}
-                    disabled={isBusy}
-                >
-                    Quick Sort
-                </button>
             </div>
             <div className="flex items-start gap-2">
                 <label>Number of items (2-50):</label>

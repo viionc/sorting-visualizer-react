@@ -61,6 +61,5 @@ export const startMergeSort = (items: Item[]) => {
     newSortingState = [[...items]];
     let newItems = [...items];
     newItems = mergeSort(newItems);
-    console.log(newSortingState);
     return {newItems, newSortingState};
 };

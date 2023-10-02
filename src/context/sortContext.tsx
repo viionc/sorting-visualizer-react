@@ -3,6 +3,7 @@ import {ReactNode, createContext, useContext, useState} from "react";
 import {startMergeSort} from "../util/mergeSort";
 import {insertionSort} from "../util/insertionSort";
 import {bubbleSort} from "../util/bubbleSort";
+import {startQuickSort} from "../util/quickSort";
 
 export type SortType = "merge" | "bubble" | "quick" | "insertion";
 export type Item = {
@@ -69,6 +70,7 @@ export default function SortContextProvider({children}: {children: ReactNode}) {
                 result = startMergeSort(items);
                 break;
             case "quick":
+                result = startQuickSort(items);
                 break;
             case "insertion":
                 result = insertionSort(items);
