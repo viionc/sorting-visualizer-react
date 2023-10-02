@@ -1,6 +1,8 @@
 import React, {useEffect} from "react";
 import {ReactNode, createContext, useContext, useState} from "react";
-import {bubbleSort, insertionSort, startMergeSort} from "../util/sorting";
+import {startMergeSort} from "../util/mergeSort";
+import {insertionSort} from "../util/insertionSort";
+import {bubbleSort} from "../util/bubbleSort";
 
 export type SortType = "merge" | "bubble" | "quick" | "insertion";
 export type Item = {

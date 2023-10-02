@@ -1,32 +1,5 @@
 import {Item} from "../context/sortContext";
 
-export const bubbleSort = (items: Item[]) => {
-    let newItems = [...items];
-    let newSortingState = [items];
-    let movedItem = true;
-    do {
-        movedItem = false;
-        for (let i = 0; i < newItems.length - 1; i++) {
-            newItems = newItems.map(item => {
-                return {...item, moved: false};
-            });
-            if (newItems[i + 1] && newItems[i].value > newItems[i + 1].value) {
-                let temp = {...newItems[i], moved: true};
-                newItems[i] = {...newItems[i + 1]};
-                newItems[i + 1] = temp;
-
-                newSortingState.push([...newItems]);
-
-                movedItem = true;
-            }
-        }
-    } while (movedItem);
-    newItems = newItems.map(item => {
-        return {...item, moved: false};
-    });
-    return {newItems, newSortingState};
-};
-
 function mergeSort(newItems: Item[]) {
     if (newItems.length <= 1) return newItems;
     let mid = Math.floor(newItems.length / 2);
@@ -89,24 +62,5 @@ export const startMergeSort = (items: Item[]) => {
     let newItems = [...items];
     newItems = mergeSort(newItems);
     console.log(newSortingState);
-    return {newItems, newSortingState};
-};
-
-export const insertionSort = (items: Item[]) => {
-    let newItems = [...items];
-    let newSortingState = [[...items]];
-    for (let i = 1; i < newItems.length; i++) {
-        for (let j = i - 1; j > -1; j--) {
-            newItems = newItems.map(item => {
-                return {...item, moved: false};
-            });
-            if (newItems[j + 1].value < newItems[j].value) {
-                let temp = {...newItems[j]};
-                newItems[j] = {...newItems[j + 1], moved: true};
-                newItems[j + 1] = temp;
-                newSortingState.push([...newItems]);
-            }
-        }
-    }
     return {newItems, newSortingState};
 };
