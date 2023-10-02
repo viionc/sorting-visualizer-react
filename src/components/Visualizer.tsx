@@ -1,8 +1,9 @@
 import {useEffect, useState} from "react";
 import {Item, useSortContext} from "../context/sortContext";
+import React from "react";
 
 function Visualizer() {
-    const {items, sortStates, isBusy, setIsBusy} = useSortContext();
+    const {sortStates, isBusy, setIsBusy, speed, timeNeededToSort} = useSortContext();
     const [index, setIndex] = useState(0);
     const [visualizerItems, setVisualizerItems] = useState<Item[]>([]);
 
@@ -19,22 +20,23 @@ function Visualizer() {
             setTimeout(() => {
                 setIndex(i);
                 if (i === sortStates.length - 1) setIsBusy(false);
-            }, (i - j) * 200);
+            }, (i - j) * speed);
         }
     };
 
     useEffect(() => {
-        setVisualizerItems(items);
-        setIndex(sortStates.length - 1);
+        console.log("tet");
         if (sortStates.length > 1) {
             setIndex(0);
             play();
+        } else {
+            setVisualizerItems(sortStates[0]);
         }
-    }, [items]);
+    }, [sortStates]);
 
     useEffect(() => {
-        if (index === sortStates.length - 1) {
-            setVisualizerItems(items);
+        if (index === 0) {
+            setVisualizerItems(sortStates[0]);
         } else {
             setVisualizerItems(sortStates[index]);
         }
@@ -43,7 +45,7 @@ function Visualizer() {
     return (
         <div className="w-[80rem] flex flex-col items-center gap-3">
             <div className="flex gap-5">
-                <div className="flex gap-3 items-center" style={{visibility: sortStates.length ? "visible" : "hidden"}}>
+                <div className="flex gap-3 items-center" style={{visibility: sortStates.length > 1 ? "visible" : "hidden"}}>
                     <button disabled={index === 0 || isBusy} onClick={() => handleChange(false, true)}>
                         Stage 0
                     </button>
@@ -60,17 +62,23 @@ function Visualizer() {
                     Play
                 </button>
             </div>
-            <div className="h-[30rem] w-[70rem] border-b flex gap-2 justify-center items-end ">
+            <div className="h-[30rem] w-[70rem] border-b flex gap-2 justify-center items-end relative ">
                 {visualizerItems &&
                     visualizerItems.map(item => {
                         return (
-                            <div
-                                className="bg-gray-500 text-white w-[1.5rem] relative flex"
-                                style={{height: `${10 + item.value * 4}px`, backgroundColor: item.moved ? "green" : ""}}
-                                key={item.createdIndex}
-                            >
-                                <span className="absolute bottom-[-2rem] left-1/2 -translate-x-[50%]">{item.value}</span>
-                            </div>
+                            <React.Fragment key={item.createdIndex}>
+                                <div
+                                    className="bg-gray-500 text-white w-[1rem] relative flex"
+                                    style={{height: `${10 + item.value * 4}px`, backgroundColor: item.moved ? "green" : ""}}
+                                >
+                                    <span className="absolute bottom-[-2rem] left-1/2 -translate-x-[50%] text-sm">{item.value}</span>
+                                </div>
+                                {timeNeededToSort !== "0" && (
+                                    <div className="absolute top-2 left-1/2 -translate-x-[50%] text-xl font-extralight">
+                                        {`Sorted in ${timeNeededToSort}ms`}{" "}
+                                    </div>
+                                )}
+                            </React.Fragment>
                         );
                     })}
             </div>

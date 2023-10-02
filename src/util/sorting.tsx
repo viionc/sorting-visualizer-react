@@ -37,6 +37,7 @@ function mergeSort(newItems: Item[]) {
 
 let newSortingState: Array<Item[]>;
 let iteration = 0;
+
 function merge(left: Item[], right: Item[]) {
     let sortedArr = [];
     let moved = [] as Item[];
@@ -83,7 +84,7 @@ function merge(left: Item[], right: Item[]) {
 }
 
 export const startMergeSort = (items: Item[]) => {
-    newSortingState = [];
+    iteration = 0;
     newSortingState = [[...items]];
     let newItems = [...items];
     newItems = mergeSort(newItems);

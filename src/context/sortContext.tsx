@@ -19,6 +19,9 @@ type SortContextProps = {
     changeNumberOfItems: (number: number) => void;
     setIsBusy: React.Dispatch<React.SetStateAction<boolean>>;
     changeSortType: (type: SortType) => void;
+    speed: number;
+    setSpeed: React.Dispatch<React.SetStateAction<number>>;
+    timeNeededToSort: string;
 };
 
 const SortContext = createContext<SortContextProps | null>(null);
@@ -35,6 +38,8 @@ export default function SortContextProvider({children}: {children: ReactNode}) {
     const [items, setItems] = useState<Item[]>([]);
     const [sortStates, setSortState] = useState<Array<Item[]>>([]);
     const [isBusy, setIsBusy] = useState<boolean>(false);
+    const [speed, setSpeed] = useState<number>(100);
+    const [timeNeededToSort, setTimeNeededToSort] = useState<string>("0");
 
     const populateItems = () => {
         let newItems = Array(numberOfItems || 0)
@@ -42,47 +47,48 @@ export default function SortContextProvider({children}: {children: ReactNode}) {
             .map((_, index) => {
                 return {value: Math.floor(Math.random() * 100), moved: false, createdIndex: index};
             });
+        setSortState([newItems]);
         setItems(newItems);
     };
 
     const startSorting = () => {
-        if (numberOfItems < 2 || numberOfItems > 30) return;
+        if (numberOfItems < 2 || numberOfItems > 50) return;
         setIsBusy(true);
         let result = {
             newItems: [] as Item[],
             newSortingState: [] as Array<Item[]>,
         };
+        let start = window.performance.now();
         switch (sortType) {
             case "bubble":
                 result = bubbleSort(items);
-                setItems(result.newItems);
-                setSortState(result.newSortingState);
                 break;
             case "merge":
                 result = startMergeSort(items);
-                setItems(result.newItems);
-                setSortState(result.newSortingState);
                 break;
             case "quick":
                 break;
             case "insertion":
                 result = insertionSort(items);
-                setItems(result.newItems);
-                setSortState(result.newSortingState);
                 break;
         }
+        let end = window.performance.now();
+        setTimeNeededToSort((end - start).toFixed(2));
         setIsBusy(false);
+        setItems(result.newItems);
+        setSortState([...result.newSortingState, [...result.newItems]]);
     };
 
     const changeNumberOfItems = (number: number) => {
-        setSortState([]);
         setNumberOfItems(number);
+        setSortState([items]);
+        setTimeNeededToSort("0");
     };
 
     const changeSortType = (type: SortType) => {
         setSortType(type);
-        setSortState([]);
         populateItems();
+        setTimeNeededToSort("0");
     };
     useEffect(() => {
         populateItems();
@@ -99,6 +105,9 @@ export default function SortContextProvider({children}: {children: ReactNode}) {
                 changeNumberOfItems,
                 setIsBusy,
                 changeSortType,
+                setSpeed,
+                speed,
+                timeNeededToSort,
             }}
         >
             {children}
